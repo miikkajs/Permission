@@ -12,7 +12,10 @@
 
 @interface Permission : CDVPlugin
 extern const NSString *TYPE_CAMERA;
+extern const NSString *TYPE_MIC;
+
 -(void)isPermissionGranted:(CDVInvokedUrlCommand*)command;
+-(void)askPermission:(CDVInvokedUrlCommand*)command;
 @end
 
 

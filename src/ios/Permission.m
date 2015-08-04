@@ -9,13 +9,16 @@
 #import <Foundation/Foundation.h>
 @implementation Permission
 const NSString *TYPE_CAMERA = @"camera";
+const NSString *TYPE_MIC = @"mic";
 
 - (void)isPermissionGranted:(CDVInvokedUrlCommand*)command{
    CDVPluginResult* pluginResult = nil;
    NSString* type = [command.arguments objectAtIndex:0];
     
     if([TYPE_CAMERA isEqualToString:type]){
-          pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:(  [self checkCameraAuthorizationStatus])];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:(  [self checkCameraAuthorizationStatus])];
+    }else if([TYPE_MIC isEqualToString:type]){
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:(  [self checkMicAuthorizationStatus])];
     }else{
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
     }
@@ -46,6 +49,16 @@ const NSString *TYPE_CAMERA = @"camera";
     return false;
 }
 
+- (BOOL)checkMicAuthorizationStatus
+{
+    AVAuthorizationStatus authStatusMic = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
+    if(authStatusMic == AVAuthorizationStatusAuthorized){
+        
+        return true;
+    }
+    return false;
+}
+
 - (void)askCameraPermission
 {
     [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
@@ -58,5 +71,3 @@ const NSString *TYPE_CAMERA = @"camera";
 }
 
 @end
-
-
