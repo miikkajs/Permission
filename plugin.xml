@@ -5,8 +5,8 @@
     <description>Cordova Permission Plugin</description>
     <license>Apache 2.0</license>
     <keywords>cordova,permission</keywords>
-    <js-module src="www/permission.js" name="permission">
-        <clobbers target="permission" />
+    <js-module src="www/permission.js" name="Permission">
+        <clobbers target="Permission" />
     </js-module>
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
