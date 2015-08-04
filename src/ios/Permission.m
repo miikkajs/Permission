@@ -32,6 +32,10 @@ const NSString *TYPE_MIC = @"mic";
         [self askCameraPermission];
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 
+    } else if([TYPE_MIC isEqualToString:type]){
+        [self askMicPermission];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+
     }else{
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
     }
@@ -63,11 +67,26 @@ const NSString *TYPE_MIC = @"mic";
 {
     [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
         if(!granted){
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+            
         } else {
             
         }
     }];
 }
 
+- (void)askMicPermission
+{
+    [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:^(BOOL granted) {
+        if(!granted){
+     
+        } else {
+            
+        }
+        
+    }];
+}
+
+
 @end
+
+
