@@ -1,8 +1,6 @@
 //
 //  Permission.m
 //
-//  Created by Miikka Salomaa on 04/08/15.
-//
 //
 
 #import "Permission.h"
@@ -11,14 +9,14 @@
 const NSString *TYPE_CAMERA = @"camera";
 const NSString *TYPE_MIC = @"mic";
 
-- (void)isPermissionGranted:(CDVInvokedUrlCommand*)command{
+- (void)getPermissionStatus:(CDVInvokedUrlCommand*)command{
    CDVPluginResult* pluginResult = nil;
    NSString* type = [command.arguments objectAtIndex:0];
     
     if([TYPE_CAMERA isEqualToString:type]){
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:(  [self checkCameraAuthorizationStatus])];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:(  [self checkCameraAuthorizationStatus])];
     }else if([TYPE_MIC isEqualToString:type]){
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:(  [self checkMicAuthorizationStatus])];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:(  [self checkMicAuthorizationStatus])];
     }else{
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
     }
@@ -43,24 +41,23 @@ const NSString *TYPE_MIC = @"mic";
 
 }
 
-- (BOOL)checkCameraAuthorizationStatus
-{
-    AVAuthorizationStatus authStatusCamera = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-    if(authStatusCamera == AVAuthorizationStatusAuthorized){
-      
-        return true;
-    }
-    return false;
+- (void) openSettings:(CDVInvokedUrlCommand *)command{
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+
 }
 
-- (BOOL)checkMicAuthorizationStatus
+- (int)checkCameraAuthorizationStatus
+{
+    AVAuthorizationStatus authStatusCamera = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    return (int)authStatusCamera;
+}
+
+- (int)checkMicAuthorizationStatus
 {
     AVAuthorizationStatus authStatusMic = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
-    if(authStatusMic == AVAuthorizationStatusAuthorized){
-        
-        return true;
-    }
-    return false;
+    return (int) authStatusMic;
 }
 
 - (void)askCameraPermission
