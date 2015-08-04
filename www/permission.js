@@ -4,16 +4,25 @@ var Permission = function () {
 
   _this.isPermissionGranted = function (type, cb) {
     cordova.exec(function (res) {
-      cb(undefined,res)
-    }, function (err) {
-      cb(err)
-    },
+        cb(undefined,res)
+      }, function (err) {
+        cb(err)
+      },
       'Permission',
       'isPermissionGranted',
       [type])
   };
 
-  _this.askPermission = function (type) {
+  _this.askPermission = function (type, cb) {
+
+    cordova.exec(function(res){
+        cb(undefined,res)
+      }, function(err){
+        cb(err)
+      },
+      'Permission',
+      'askPermission',
+      [type])
   };
 
 
@@ -24,6 +33,7 @@ var Permission = function () {
 
 
 
-Permission.prototype.CAMERA = "camera";
+Permission.prototype.TYPE_CAMERA = "camera";
+Permission.prototype.TYPE_MIC = "mic";
 
 module.exports = new Permission()
